@@ -1,0 +1,11 @@
+{
+  "name": "lyricpair-github-pages",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "check": "node --check public/app.js && node --check scripts/build-pages.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
