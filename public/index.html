@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://api.spotify.com https://lrclib.net; img-src 'self' https://i.scdn.co data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="theme-color" content="#13795b"><title>LyricPair｜歌詞翻譯工作台</title>
   <link rel="stylesheet" href="./style.css"><link rel="icon" href="./icon.svg">
 </head>
@@ -13,7 +14,7 @@
       <div class="eyebrow">01 · 找到歌曲</div>
       <div class="tabs"><button class="tab active" data-tab="link">貼 Spotify 連結</button><button class="tab" data-tab="search">搜尋歌曲</button></div>
       <form id="findForm"><input id="findInput" autocomplete="off" placeholder="https://open.spotify.com/track/…"><button class="primary">解析歌曲</button></form>
-      <p id="configHint" class="hint">Spotify 已由私人後端連線，不需要登入。</p><div id="results" class="results"></div>
+      <p id="configHint" class="hint">Spotify 已透過 GitHub Actions 的短效憑證連線，不需要登入。</p><div id="results" class="results"></div>
     </section>
     <section id="workspace" class="hidden">
       <article class="track card"><img id="cover" alt="專輯封面"><div><div class="eyebrow">已選歌曲</div><h1 id="trackName"></h1><p id="trackMeta"></p><a id="spotifyLink" target="_blank" rel="noreferrer">在 Spotify 開啟 ↗</a></div></article>
