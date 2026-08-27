@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: lyricpair-api
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: ALLOWED_ORIGIN
+        sync: false
