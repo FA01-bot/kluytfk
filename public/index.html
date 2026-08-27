@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://accounts.spotify.com https://api.spotify.com https://lrclib.net; img-src 'self' https://i.scdn.co data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="theme-color" content="#13795b"><title>LyricPair｜歌詞翻譯工作台</title>
+  <link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./pages.css"><link rel="icon" href="./icon.svg">
+</head>
+<body>
+  <main class="shell">
+    <header><a class="brand" href="./">Lyric<span>Pair</span></a><div class="spotify-auth"><span id="authState">尚未連接 Spotify</span><button id="spotifyAuth">連接 Spotify</button></div></header>
+    <section class="card hero">
+      <div class="eyebrow">01 · 找到歌曲</div>
+      <div class="tabs"><button class="tab active" data-tab="link">貼 Spotify 連結</button><button class="tab" data-tab="search">搜尋歌曲</button></div>
+      <form id="findForm"><input id="findInput" autocomplete="off" placeholder="https://open.spotify.com/track/…"><button class="primary">解析歌曲</button></form>
+      <p id="configHint" class="hint">第一次使用請先連接 Spotify。</p><div id="results" class="results"></div>
+    </section>
+    <section id="workspace" class="hidden">
+      <article class="track card"><img id="cover" alt="專輯封面"><div><div class="eyebrow">已選歌曲</div><h1 id="trackName"></h1><p id="trackMeta"></p><a id="spotifyLink" target="_blank" rel="noreferrer">在 Spotify 開啟 ↗</a></div></article>
+      <section class="card">
+        <div class="section-head"><div><div class="eyebrow">02 · 原文歌詞</div><h2>確認文字內容</h2></div><span id="sourceBadge" class="badge">尚未取得</span></div>
+        <div id="lyricsStatus" class="notice">選擇歌曲後會自動查詢；也可以直接貼上文字。</div>
+        <textarea id="original" rows="14" placeholder="原文會顯示在這裡，也可自行貼上…"></textarea>
+        <div class="actions"><button id="copyOriginal">複製原文</button><button id="copyPrompt" class="primary">複製給 AI 翻譯</button></div>
+      </section>
+      <section class="card">
+        <div class="eyebrow">03 · 貼回翻譯</div><h2>原文 × 繁中逐行對照</h2>
+        <p class="hint">貼上 AI 回傳內容；接受交錯對照或只有中文且行數相同。</p>
+        <textarea id="translation" rows="10" placeholder="將 AI 翻譯結果貼在這裡…"></textarea>
+        <div class="actions"><button id="makeCompare" class="primary">產生逐行對照</button><button id="copyChinese">複製中文譯詞</button></div>
+        <div id="compare" class="compare empty">逐行對照會出現在這裡</div>
+      </section>
+    </section>
+    <div id="toast" role="status"></div>
+  </main>
+  <script src="./config.js"></script><script src="./app.js"></script>
+</body></html>

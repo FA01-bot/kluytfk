@@ -1,0 +1,1 @@
+.spotify-auth{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}.spotify-auth button{padding:8px 11px}.spotify-auth button:disabled{opacity:.55;cursor:not-allowed}@media(max-width:640px){.spotify-auth{margin-top:14px;justify-content:space-between}}
