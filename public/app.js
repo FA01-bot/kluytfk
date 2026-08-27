@@ -2,11 +2,10 @@ const $ = s => document.querySelector(s);
 const auth = window.LYRICPAIR_CONFIG || {};
 let mode = 'link';
 
-const promptText = text => `請將以下由我提供的文字翻譯成自然、流暢的繁體中文。\n\n規則：\n1. 嚴格保留原文順序與分行，不合併或拆分任何一行。\n2. 每行先放原文，下一行放對應的繁體中文。\n3. 不添加解說、標題、註解、羅馬拼音或原文沒有的內容。\n4. 依語境自然翻譯；不確定時忠於原意，不自行編造。\n5. 重複的行也完整翻譯，不省略。\n\n待翻譯文字：\n${text}`;
+const promptText = text => `請處理以下由我提供的文字，為每一行提供羅馬拼音與自然、流暢的繁體中文翻譯。\n\n輸出規則：\n1. 嚴格依照原文順序逐行處理，不合併、不拆分、不省略任何一行。\n2. 每組固定輸出三行：\n原文：保持該行完全不變\n羅馬拼音：該行的標準羅馬化讀音\n繁中：該行自然且忠於語境的繁體中文翻譯\n3. 日文使用 Hepburn 羅馬字；韓文使用修訂羅馬字；中文使用漢語拼音；其他非拉丁文字使用該語言最常見的標準羅馬化。\n4. 原文已是拉丁字母時，羅馬拼音列保留其原文拼寫，不任意改寫。\n5. 不添加標題、前言、解說、註解、總結或原文沒有的內容。\n6. 俚語與隱喻依語境自然翻譯；不確定時忠於原意，不自行編造。\n7. 重複行也必須完整輸出。\n\n待處理文字：\n${text}`;
 
 function toast(text){const el=$('#toast');el.textContent=text;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
 function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function lines(s){return s.split(/\r?\n/).map(x=>x.trim()).filter(Boolean)}
 function spotifyId(value){return String(value).match(/(?:open\.spotify\.com\/track\/|spotify:track:)([A-Za-z0-9]{22})/)?.[1]||null}
 async function copy(text,label){if(!text.trim())return toast('目前沒有可複製的內容');await navigator.clipboard.writeText(text);toast(label)}
 function ensureToken(){if(!auth.accessToken)throw new Error('GitHub Actions 尚未產生 Spotify 憑證');if(Number(auth.expiresAt)<Date.now())throw new Error('Spotify 短效憑證已過期，請稍後等待 GitHub Actions 自動更新')}
@@ -21,7 +20,4 @@ function renderResults(items){$('#results').innerHTML=items.length?items.map((t,
 async function selectTrack(t){$('#workspace').classList.remove('hidden');$('#cover').src=t.image;$('#trackName').textContent=t.name;$('#trackMeta').textContent=`${t.artists} · ${t.album}`;$('#spotifyLink').href=t.spotifyUrl;$('#results').innerHTML='';$('#original').value='';$('#sourceBadge').textContent='查詢中';$('#lyricsStatus').textContent='正在查詢…';window.scrollTo({top:$('#workspace').offsetTop-20,behavior:'smooth'});try{const d=await findLyrics(t);$('#original').value=d.plainLyrics||'';$('#sourceBadge').textContent='LRCLIB';$('#lyricsStatus').textContent=d.instrumental?'此曲目被標示為純音樂。':'已取得原文，可先確認內容。'}catch(err){$('#sourceBadge').textContent='可手動貼上';$('#lyricsStatus').textContent=err.message}}
 $('#copyOriginal').onclick=()=>copy($('#original').value,'已複製原文');
 $('#copyPrompt').onclick=()=>copy(promptText($('#original').value),'已複製 AI 翻譯提示與原文');
-$('#makeCompare').onclick=()=>{const originals=lines($('#original').value),raw=lines($('#translation').value);let chinese=[];if(raw.length===originals.length)chinese=raw;else if(raw.length>=originals.length*2){for(let i=0;i<raw.length;i+=2)chinese.push(raw[i+1]||'')}else chinese=raw;$('#compare').classList.remove('empty');$('#compare').innerHTML=originals.map((line,i)=>`<div class="pair"><div>${escapeHtml(line)}</div><div class="zh">${escapeHtml(chinese[i]||'—')}</div></div>`).join('');if(chinese.length!==originals.length)toast('行數不同，請檢查未配對內容')};
-$('#copyChinese').onclick=()=>{const originals=lines($('#original').value),raw=lines($('#translation').value);copy((raw.length>=originals.length*2?raw.filter((_,i)=>i%2===1):raw).join('\n'),'已複製中文譯文')};
-
-if(!auth.accessToken){$('#configHint').textContent='GitHub Actions 尚未產生 Spotify 短效憑證。';$('#findForm').querySelector('button').disabled=true}else if(Number(auth.expiresAt)<Date.now()){$('#configHint').textContent='Spotify 短效憑證已過期，Actions 將定期自動更新。'}
+if(!auth.accessToken){$('#configHint').textContent='尚未連線';$('#findForm').querySelector('button').disabled=true}else if(Number(auth.expiresAt)<Date.now()){$('#configHint').textContent='憑證更新中'}else{$('#configHint').textContent='已連線'}
