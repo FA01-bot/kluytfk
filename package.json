@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-pages.mjs",
-    "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check public/app.js && node --check scripts/build-pages.mjs"
+    "check": "node --check public/app.js && node --check scripts/build-pages.mjs"
   },
   "engines": { "node": ">=20" }
 }
