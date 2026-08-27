@@ -27,7 +27,7 @@ jobs:
       - name: Build hidden-path site
         env:
           PRIVATE_PATH: ${{ secrets.PRIVATE_PATH }}
-          SPOTIFY_CLIENT_ID: ${{ vars.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_ID: ${{ vars.SPOTIFY_CLIENT_ID || secrets.SPOTIFY_CLIENT_ID }}
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
